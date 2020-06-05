@@ -141,7 +141,8 @@ class BarChart extends AbstractChart {
               ? this.renderHorizontalLines({
                   ...config,
                   count: segments,
-                  paddingTop
+                  paddingTop,
+                  paddingRight
                 })
               : null}
           </G>
@@ -151,7 +152,7 @@ class BarChart extends AbstractChart {
                   ...config,
                   count: segments,
                   data: data.datasets[0].data,
-                  paddingTop,
+                  paddingTop: paddingTop + 4,
                   paddingRight
                 })
               : null}

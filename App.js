@@ -1,7 +1,6 @@
 import "babel-polyfill";
 import React from "react";
 import { ScrollView, StatusBar, Dimensions, Text } from "react-native";
-import ScrollableTabView from "react-native-scrollable-tab-view";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import LineChart from "./src/line-chart";
 import PieChart from "./src/pie-chart";
@@ -19,6 +18,18 @@ import {
 
 // in Expo - swipe left to see the following styling, or create your own
 const chartConfigs = [
+  {
+    backgroundColor: "#ffffff",
+    backgroundGradientFrom: "#ffffff",
+    backgroundGradientTo: "#ffffff",
+    fillShadowGradient: "#26abe2",
+    backgroundGradientToOpacity: 1,
+    fillShadowGradientOpacity: 1,
+    propsForBackgroundLines: {
+      strokeDasharray: ""
+    },
+    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+  },
   {
     backgroundColor: "#000000",
     backgroundGradientFrom: "#1E2923",
@@ -39,12 +50,6 @@ const chartConfigs = [
     propsForBackgroundLines: {
       strokeDasharray: "" // solid background lines with no dashes
     }
-  },
-  {
-    backgroundColor: "#ffffff",
-    backgroundGradientFrom: "#ffffff",
-    backgroundGradientTo: "#ffffff",
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
   },
   {
     backgroundColor: "#26872a",
@@ -102,7 +107,7 @@ export default class App extends React.Component {
     const { width } = Dimensions.get("window");
     const height = 256;
     return (
-      <ScrollableTabView renderTabBar={this.renderTabBar}>
+      <ScrollView renderTabBar={this.renderTabBar}>
         {chartConfigs.map(chartConfig => {
           const labelStyle = {
             color: chartConfig.color(),
@@ -129,7 +134,18 @@ export default class App extends React.Component {
                 height={height}
                 yAxisLabel="$"
                 yAxisSuffix="k"
-                chartConfig={chartConfig}
+                chartConfig={{
+                  backgroundColor: "#ffffff",
+                  backgroundGradientFrom: "#ffffff",
+                  backgroundGradientTo: "#ffffff",
+                  fillShadowGradient: "#26abe2",
+                  backgroundGradientToOpacity: 0,
+                  fillShadowGradientOpacity: 0,
+                  propsForBackgroundLines: {
+                    strokeDasharray: ""
+                  },
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+                }}
                 style={graphStyle}
                 verticalLabelRotation={20}
                 onDataPointClick={({ value, getColor }) =>
@@ -141,6 +157,20 @@ export default class App extends React.Component {
                 }
                 formatXLabel={label => label.toUpperCase()}
               />
+              <Text style={labelStyle}>Bar Graph</Text>
+              <BarChart
+                showValuesOnTopOfBars={true}
+                width={width}
+                height={height}
+                data={data}
+                yAxisLabel="$"
+                showBarTops={false}
+                style={{
+                  paddingRight: 120
+                }}
+                chartConfig={chartConfig}
+                style={graphStyle}
+              />
               <FlashMessage duration={1000} />
               <Text style={labelStyle}>Progress Chart</Text>
               <ProgressChart
@@ -150,15 +180,6 @@ export default class App extends React.Component {
                 chartConfig={chartConfig}
                 style={graphStyle}
                 hideLegend={false}
-              />
-              <Text style={labelStyle}>Bar Graph</Text>
-              <BarChart
-                width={width}
-                height={height}
-                data={data}
-                yAxisLabel="$"
-                chartConfig={chartConfig}
-                style={graphStyle}
               />
               <Text style={labelStyle}>Stacked Bar Graph</Text>
               <StackedBarChart
@@ -209,7 +230,9 @@ export default class App extends React.Component {
                 style={graphStyle}
                 hidePointsAtIndex={[0, data.datasets[0].data.length - 1]}
               />
-              <Text style={labelStyle}>Line Chart with shadow background as line color</Text>
+              <Text style={labelStyle}>
+                Line Chart with shadow background as line color
+              </Text>
               <LineChart
                 bezier
                 data={data}
@@ -291,7 +314,7 @@ export default class App extends React.Component {
             </ScrollView>
           );
         })}
-      </ScrollableTabView>
+      </ScrollView>
     );
   }
 }
