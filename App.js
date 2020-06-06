@@ -2,7 +2,7 @@ import "babel-polyfill";
 import React from "react";
 import { ScrollView, StatusBar, Dimensions, Text } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import LineChart from "./src/line-chart";
+import { LineChart, MixedChart } from "./src/line-chart";
 import PieChart from "./src/pie-chart";
 import ProgressChart from "./src/progress-chart";
 import BarChart from "./src/bar-chart";
@@ -127,6 +127,39 @@ export default class App extends React.Component {
               }}
             >
               <Text style={labelStyle}>Bezier Line Chart</Text>
+              <MixedChart
+                bezier
+                data={data}
+                width={width}
+                showBarTops={false}
+                height={height}
+                yAxisLabel="$"
+                yAxisSuffix="k"
+                chartConfig={{
+                  backgroundColor: "#ffffff",
+                  backgroundGradientFrom: "#ffffff",
+                  backgroundGradientTo: "#ffffff",
+                  fillShadowGradient: "#26abe2",
+                  backgroundGradientToOpacity: 1,
+                  fillShadowGradientOpacity: 1,
+                  propsForBackgroundLines: {
+                    strokeDasharray: ""
+                  },
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+                }}
+                withDots={false}
+                withVerticalLines={false}
+                style={graphStyle}
+                verticalLabelRotation={20}
+                onDataPointClick={({ value, getColor }) =>
+                  showMessage({
+                    message: `${value}`,
+                    description: "You selected this value",
+                    backgroundColor: getColor(0.9)
+                  })
+                }
+                formatXLabel={label => label.toUpperCase()}
+              />
               <LineChart
                 bezier
                 data={data}
@@ -146,6 +179,8 @@ export default class App extends React.Component {
                   },
                   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
                 }}
+                withDots={false}
+                withVerticalLines={false}
                 style={graphStyle}
                 verticalLabelRotation={20}
                 onDataPointClick={({ value, getColor }) =>

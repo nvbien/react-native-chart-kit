@@ -1,3 +1,4 @@
 import LineChart from "./line-chart";
+import MixedChart from "./mixed-chart";
 
-export default LineChart;
+export { MixedChart, LineChart };
